@@ -1,0 +1,141 @@
+@import url("https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --paper: #f7f2e8;
+  --paper-strong: #fffaf0;
+  --ink: #2b2a27;
+  --ink-soft: #5a5146;
+  --accent: #7a5b35;
+  --border: #e3d8c7;
+  --shadow: 0 18px 40px rgba(60, 41, 20, 0.08);
+  --font-serif: "Crimson Pro", ui-serif, Georgia, serif;
+  --font-sans: "Work Sans", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--paper);
+  color: var(--ink);
+  background-image: radial-gradient(
+      rgba(255, 255, 255, 0.6) 1px,
+      transparent 0
+    ),
+    linear-gradient(180deg, #fbf7ef 0%, #f3ecdf 100%);
+  background-size: 18px 18px, 100% 100%;
+  @apply antialiased;
+  @apply text-base leading-6;
+  @apply min-h-screen;
+}
+
+a {
+  color: var(--ink);
+  @apply no-underline hover:underline;
+}
+
+.layout {
+  @apply min-h-screen flex flex-col;
+}
+
+.header {
+  @apply w-full border-b bg-white/80 backdrop-blur;
+  border-color: var(--border);
+  @apply sticky top-0 z-20;
+}
+
+.header > .brand {
+  font-family: var(--font-serif);
+  color: var(--accent);
+  @apply text-lg font-semibold tracking-wide;
+}
+
+.nav {
+  @apply flex flex-wrap gap-4 text-sm;
+}
+
+.main {
+  @apply flex-1 w-full max-w-4xl mx-auto px-4 py-8;
+}
+
+.footer {
+  @apply w-full border-t text-sm;
+  border-color: var(--border);
+  color: var(--ink-soft);
+  @apply px-4 py-6 text-center;
+}
+
+/* Layout container spacing */
+.header,
+.footer {
+  @apply px-4 py-4;
+}
+
+.header .container,
+.footer .container {
+  @apply w-full max-w-4xl mx-auto flex items-center justify-between gap-4;
+}
+
+.book-surface {
+  background: var(--paper-strong);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.reader {
+  font-family: var(--font-serif);
+  color: var(--ink);
+  line-height: 1.9;
+  font-size: 1.1rem;
+  max-width: 68ch;
+  margin: 0 auto;
+}
+
+.reader h1,
+.reader h2,
+.reader h3 {
+  font-family: var(--font-serif);
+}
+
+.page-curl {
+  pointer-events: none;
+  position: absolute;
+  top: -12px;
+  bottom: -12px;
+  width: 120px;
+  opacity: 0;
+  transition: opacity 200ms ease-out, transform 200ms ease-out;
+}
+
+.page-curl-next {
+  right: -10px;
+  opacity: 0.45;
+  background: radial-gradient(
+    circle at right center,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(240, 230, 210, 0.2) 55%,
+    rgba(0, 0, 0, 0) 70%
+  );
+  transform: rotate(-2deg);
+}
+
+.page-curl-prev {
+  left: -10px;
+  opacity: 0.45;
+  background: radial-gradient(
+    circle at left center,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(240, 230, 210, 0.2) 55%,
+    rgba(0, 0, 0, 0) 70%
+  );
+  transform: rotate(2deg);
+}

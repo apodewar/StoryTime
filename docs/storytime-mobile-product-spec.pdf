@@ -1,0 +1,369 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Count 6 /Kids [3 0 R 5 0 R 7 0 R 9 0 R 11 0 R 13 0 R] >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 15 0 R >> >> /Contents 4 0 R >>
+endobj
+4 0 obj
+<< /Length 2351 >>
+stream
+BT
+/F1 11 Tf
+50 740 Td
+(STORYTIME MOBILE-FIRST PRODUCT SPECIFICATION) Tj
+0 -14 Td () Tj
+0 -14 Td (Document Purpose) Tj
+0 -14 Td (This document translates the app concept into a build-ready product reference for StoryTime) Tj
+0 -14 Td (as a mobile-first experience \(with the website aligned to the same behavior and features\).) Tj
+0 -14 Td () Tj
+0 -14 Td (Product Vision) Tj
+0 -14 Td (StoryTime is a short-story discovery, reading, and writing platform with:) Tj
+0 -14 Td (- TikTok-style story discovery.) Tj
+0 -14 Td (- Swipe-based curation into personal shelves.) Tj
+0 -14 Td (- Fast reading UX with completion-focused design.) Tj
+0 -14 Td (- Social and creator ecosystem features \(follow, repost/retweet-style sharing, rankings,) Tj
+0 -14 Td (competitions\).) Tj
+0 -14 Td () Tj
+0 -14 Td (Core Principles) Tj
+0 -14 Td (- Mobile first: design for phone interaction before desktop.) Tj
+0 -14 Td (- Frictionless discovery: stories are instantly browsable and filterable.) Tj
+0 -14 Td (- Completion optimized: ranking and recommendations favor completion quality signals.) Tj
+0 -14 Td (- Creator growth: new and smaller authors should still receive distribution.) Tj
+0 -14 Td (- Reader ownership: users organize saved stories into custom shelves.) Tj
+0 -14 Td () Tj
+0 -14 Td (Primary User Roles) Tj
+0 -14 Td (- Reader: discovers, reads, saves, rates, and follows authors.) Tj
+0 -14 Td (- Author: writes, publishes, and tracks engagement.) Tj
+0 -14 Td (- Hybrid user: both reads and writes.) Tj
+0 -14 Td (- Platform curator/admin: manages featured lists, competitions, and editorial highlights.) Tj
+0 -14 Td () Tj
+0 -14 Td (Information Architecture \(Top-Level Tabs\)) Tj
+0 -14 Td (1. Feed \(default discovery experience\)) Tj
+0 -14 Td (2. Authors) Tj
+0 -14 Td (3. Shelves) Tj
+0 -14 Td (4. Write \(center tab\)) Tj
+0 -14 Td (5. Profile) Tj
+0 -14 Td () Tj
+0 -14 Td (Additional content surfaces integrated into Feed and/or standalone pages:) Tj
+0 -14 Td (- Personal Feed) Tj
+0 -14 Td (- Storytime Algo) Tj
+0 -14 Td (- Public Domain) Tj
+0 -14 Td (- Suggestions) Tj
+0 -14 Td (- Hot) Tj
+0 -14 Td (- Featured) Tj
+0 -14 Td () Tj
+0 -14 Td (Feed Experience \(Primary Screen\)) Tj
+0 -14 Td () Tj
+0 -14 Td (### Header) Tj
+0 -14 Td (- Thin horizontal search bar across the top.) Tj
+0 -14 Td (- Search supports text and filters.) Tj
+0 -14 Td (- Mode filters:) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 15 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 2000 >>
+stream
+BT
+/F1 11 Tf
+50 740 Td
+(  - Following) Tj
+0 -14 Td (  - Feed) Tj
+0 -14 Td (  - Public Domain) Tj
+0 -14 Td () Tj
+0 -14 Td (### Main Card Area \(~80% of screen\)) Tj
+0 -14 Td (- Dominant “book-like” story card containing:) Tj
+0 -14 Td (  - Cover image) Tj
+0 -14 Td (  - Title) Tj
+0 -14 Td (  - Metadata footer:) Tj
+0 -14 Td (    - Length) Tj
+0 -14 Td (    - Author) Tj
+0 -14 Td (    - Genre) Tj
+0 -14 Td (    - One-sentence synopsis) Tj
+0 -14 Td (    - Views) Tj
+0 -14 Td (    - Likes) Tj
+0 -14 Td () Tj
+0 -14 Td (### List Mode \(Website-Like Option on iPhone\)) Tj
+0 -14 Td (- Feed includes a toggle between:) Tj
+0 -14 Td (  - Card mode \(default swipe/book-style experience\)) Tj
+0 -14 Td (  - List mode \(website-like browsing experience\)) Tj
+0 -14 Td (- List mode presents multiple stories in a vertical list with compact cards.) Tj
+0 -14 Td (- Each list item includes:) Tj
+0 -14 Td (  - Cover thumbnail) Tj
+0 -14 Td (  - Title) Tj
+0 -14 Td (  - Author) Tj
+0 -14 Td (  - Genre) Tj
+0 -14 Td (  - Length) Tj
+0 -14 Td (  - One-sentence synopsis) Tj
+0 -14 Td (  - Views and likes) Tj
+0 -14 Td (- List mode supports quick open into the reader and quick save to Shelves.) Tj
+0 -14 Td (- Mode preference should persist per user across sessions/devices when possible.) Tj
+0 -14 Td () Tj
+0 -14 Td (### Gestures on Story Card) Tj
+0 -14 Td (- Swipe right:) Tj
+0 -14 Td (  - Save story to Shelves \(read later\).) Tj
+0 -14 Td (  - User can choose/create shelf name \(playlist-style organization\).) Tj
+0 -14 Td (- Swipe left:) Tj
+0 -14 Td (  - Dismiss story.) Tj
+0 -14 Td (  - Story should not appear again to that user.) Tj
+0 -14 Td (- Swipe up:) Tj
+0 -14 Td (  - Snooze story.) Tj
+0 -14 Td (  - Story may reappear later, but not the same day.) Tj
+0 -14 Td (- Tap/press cover:) Tj
+0 -14 Td (  - Open story reader at page one.) Tj
+0 -14 Td () Tj
+0 -14 Td (Reader Experience) Tj
+0 -14 Td (- Opens from selected story card.) Tj
+0 -14 Td (- Shows reading progress bar indicating completion percentage.) Tj
+ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 15 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 2076 >>
+stream
+BT
+/F1 11 Tf
+50 740 Td
+(- Reading modes:) Tj
+0 -14 Td (  - Page-turn mode \(book-like horizontal page swipes\).) Tj
+0 -14 Td (  - Scroll mode \(continuous vertical reading\).) Tj
+0 -14 Td (- Completion event should be captured when user reaches end of story.) Tj
+0 -14 Td () Tj
+0 -14 Td (Shelves) Tj
+0 -14 Td (- Save-for-later system using user-created named shelves.) Tj
+0 -14 Td (- Analogous to playlists for books/stories.) Tj
+0 -14 Td (- Users can:) Tj
+0 -14 Td (  - Create shelf) Tj
+0 -14 Td (  - Rename shelf) Tj
+0 -14 Td (  - Add/remove stories) Tj
+0 -14 Td (  - Browse stories by shelf) Tj
+0 -14 Td () Tj
+0 -14 Td (Authors Tab) Tj
+0 -14 Td (- Ranks authors by viewers:) Tj
+0 -14 Td (  - Monthly) Tj
+0 -14 Td (  - Yearly) Tj
+0 -14 Td (- Supports genre-based categorization.) Tj
+0 -14 Td (- Highlights newly released stories from authors.) Tj
+0 -14 Td () Tj
+0 -14 Td (Feed Types and Ranking Surfaces) Tj
+0 -14 Td () Tj
+0 -14 Td (### 1\) Personal Feed) Tj
+0 -14 Td (- Content from followed users/authors.) Tj
+0 -14 Td (- Includes repost/retweet-style shared stories.) Tj
+0 -14 Td (- Includes occasional personalized story suggestions.) Tj
+0 -14 Td () Tj
+0 -14 Td (### 2\) StoryTime Algo) Tj
+0 -14 Td (- Main algorithmic feed.) Tj
+0 -14 Td (- Ranks by completion rate and personalization signals.) Tj
+0 -14 Td (- Personalization considers preferred genres and preferred lengths.) Tj
+0 -14 Td (- Every uploaded story is eligible.) Tj
+0 -14 Td (- Includes a “new story push” mechanism so fresh uploads can get discovery.) Tj
+0 -14 Td () Tj
+0 -14 Td (### 3\) Public Domain) Tj
+0 -14 Td (- Dedicated page containing public domain stories.) Tj
+0 -14 Td (- Also integrated into broader discovery surfaces.) Tj
+0 -14 Td () Tj
+0 -14 Td (### 4\) Suggestions) Tj
+0 -14 Td (- Hand-picked recommendations by the app.) Tj
+0 -14 Td (- Window: stories from the past 3 months.) Tj
+0 -14 Td (- Refresh cadence: monthly.) Tj
+0 -14 Td (- Stories fall off after 3 months.) Tj
+0 -14 Td (- Sorted by length.) Tj
+0 -14 Td () Tj
+0 -14 Td (### 5\) Hot) Tj
+0 -14 Td (- Top 10 stories by:) Tj
+ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 15 0 R >> >> /Contents 10 0 R >>
+endobj
+10 0 obj
+<< /Length 1744 >>
+stream
+BT
+/F1 11 Tf
+50 740 Td
+(  - Length) Tj
+0 -14 Td (  - Genre) Tj
+0 -14 Td (  - Time window \(month and year\)) Tj
+0 -14 Td (- Rating inputs:) Tj
+0 -14 Td (  - Completion rate) Tj
+0 -14 Td (  - Like/dislike ratio) Tj
+0 -14 Td (  - Viewer volume) Tj
+0 -14 Td () Tj
+0 -14 Td (### 6\) Featured) Tj
+0 -14 Td (- Company/editorial hand-picked stories.) Tj
+0 -14 Td (- Includes competitions and curated campaigns.) Tj
+0 -14 Td () Tj
+0 -14 Td (Write Tab) Tj
+0 -14 Td (- Central creation surface for drafting stories.) Tj
+0 -14 Td (- Supports author workflow from draft to publish.) Tj
+0 -14 Td (- Should be easy to access from the main navigation.) Tj
+0 -14 Td () Tj
+0 -14 Td (Profile Tab) Tj
+0 -14 Td (- User identity and activity hub:) Tj
+0 -14 Td (  - User’s published stories) Tj
+0 -14 Td (  - Followers) Tj
+0 -14 Td (  - Following) Tj
+0 -14 Td (  - Retweets/reposts) Tj
+0 -14 Td (  - Shelves) Tj
+0 -14 Td () Tj
+0 -14 Td (Key Data Model \(Conceptual\)) Tj
+0 -14 Td (- User) Tj
+0 -14 Td (- AuthorProfile) Tj
+0 -14 Td (- Story) Tj
+0 -14 Td (- StoryPage or StoryContent) Tj
+0 -14 Td (- StoryMetrics \(views, likes, dislikes, completion rate\)) Tj
+0 -14 Td (- Shelf) Tj
+0 -14 Td (- ShelfItem) Tj
+0 -14 Td (- Follow) Tj
+0 -14 Td (- Repost/Retweet) Tj
+0 -14 Td (- Genre) Tj
+0 -14 Td (- FeedImpression) Tj
+0 -14 Td (- SwipeAction \(right/left/up\)) Tj
+0 -14 Td (- RecommendationCandidate) Tj
+0 -14 Td (- RankingSnapshot \(monthly/yearly/genre/length\)) Tj
+0 -14 Td () Tj
+0 -14 Td (Core Events to Track) Tj
+0 -14 Td (- Story impression) Tj
+0 -14 Td (- Story open) Tj
+0 -14 Td (- Story completion) Tj
+0 -14 Td (- Reader mode selected \(page vs scroll\)) Tj
+0 -14 Td (- Swipe right \(save\), left \(dismiss\), up \(snooze\)) Tj
+0 -14 Td (- Like/dislike) Tj
+ET
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 15 0 R >> >> /Contents 12 0 R >>
+endobj
+12 0 obj
+<< /Length 2961 >>
+stream
+BT
+/F1 11 Tf
+50 740 Td
+(- Follow/unfollow) Tj
+0 -14 Td (- Repost action) Tj
+0 -14 Td (- Shelf create/rename/delete) Tj
+0 -14 Td (- Story publish) Tj
+0 -14 Td () Tj
+0 -14 Td (Moderation and Safety Considerations) Tj
+0 -14 Td (- Story reporting flow.) Tj
+0 -14 Td (- Basic content policy enforcement.) Tj
+0 -14 Td (- Public domain validation for rights-safe labeling.) Tj
+0 -14 Td (- Rate limiting and abuse protection for engagement actions.) Tj
+0 -14 Td () Tj
+0 -14 Td (Mobile UX Notes) Tj
+0 -14 Td (- Keep story card and gesture hit areas thumb-friendly.) Tj
+0 -14 Td (- Use immediate gesture feedback \(visual direction cues\).) Tj
+0 -14 Td (- Ensure reader mode toggle is persistent and easy to reach.) Tj
+0 -14 Td (- Keep navigation lightweight and consistent across tabs.) Tj
+0 -14 Td () Tj
+0 -14 Td (Website Alignment Strategy) Tj
+0 -14 Td (- Maintain one product behavior model across web and mobile.) Tj
+0 -14 Td (- Implement responsive layouts, but preserve the same core interactions:) Tj
+0 -14 Td (  - Swipe-equivalent interactions on web \(mouse/keyboard controls and buttons\).) Tj
+0 -14 Td (  - Identical feed types and ranking logic.) Tj
+0 -14 Td (  - Shared account, shelves, profile, and author systems.) Tj
+0 -14 Td (- Treat mobile as the reference UX; desktop adapts without changing feature semantics.) Tj
+0 -14 Td () Tj
+0 -14 Td (Website Tab Routes \(Current Build Target\)) Tj
+0 -14 Td (- `/feed` : Primary feed with card/list mode, search, mode filters, and quick access to all) Tj
+0 -14 Td (discovery surfaces.) Tj
+0 -14 Td (- `/personal-feed` : Followed/engagement-weighted surface with occasional personalized) Tj
+0 -14 Td (suggestions.) Tj
+0 -14 Td (- `/algo` : Storytime algorithm surface ranked by completion-heavy score and personalized) Tj
+0 -14 Td (filters.) Tj
+0 -14 Td (- `/public-domain` : Dedicated public domain stories page.) Tj
+0 -14 Td (- `/suggestions` : Last-3-month curated recommendations sorted by length.) Tj
+0 -14 Td (- `/hot` : Top 10 stories with month/year, genre, and length filters.) Tj
+0 -14 Td (- `/featured` : Editorial/company hand-picked stories and campaigns.) Tj
+0 -14 Td (- `/authors` : Author rankings by month/year with genre filters and new release highlights.) Tj
+0 -14 Td (- `/shelves` : Reader-managed save-for-later shelves \(playlist-style organization\).) Tj
+0 -14 Td (- `/write` : Story drafting and publishing flow.) Tj
+0 -14 Td (- `/profile/[id]` : User profile with stories plus social/account sections \(followers,) Tj
+0 -14 Td (following, reposts, shelves\).) Tj
+0 -14 Td () Tj
+0 -14 Td (Suggested Build Phasing) Tj
+0 -14 Td (1. Phase 1: Mobile Feed + Gestures + Reader + Shelves \(core loop\)) Tj
+0 -14 Td (2. Phase 2: Authors tab + Personal Feed + Profile core) Tj
+0 -14 Td (3. Phase 3: StoryTime Algo + Hot + Suggestions + Public Domain integration) Tj
+0 -14 Td (4. Phase 4: Write tab polishing + Featured campaigns + competitions + advanced ranking) Tj
+0 -14 Td (transparency) Tj
+ET
+endstream
+endobj
+13 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 15 0 R >> >> /Contents 14 0 R >>
+endobj
+14 0 obj
+<< /Length 1515 >>
+stream
+BT
+/F1 11 Tf
+50 740 Td
+() Tj
+0 -14 Td (Acceptance Criteria Snapshot) Tj
+0 -14 Td (- User can discover stories from feed and open them in reader.) Tj
+0 -14 Td (- User can swipe right to save, left to dismiss, up to snooze.) Tj
+0 -14 Td (- User can switch between card mode and list mode on iPhone.) Tj
+0 -14 Td (- User can organize saved stories into named shelves.) Tj
+0 -14 Td (- Reader supports both page-turn and scroll modes.) Tj
+0 -14 Td (- Core tabs exist and are navigable.) Tj
+0 -14 Td (- Ranking surfaces \(Personal, Algo, Hot, Suggestions, Featured, Public Domain\) are clearly) Tj
+0 -14 Td (separated and functional.) Tj
+0 -14 Td (- Author and profile views reflect social and publishing activity.) Tj
+0 -14 Td () Tj
+0 -14 Td (Open Questions \(To Finalize Before Full Build\)) Tj
+0 -14 Td (- What exact minimum and maximum story length qualifies as “short story”?) Tj
+0 -14 Td (- Should dismissed stories be recoverable in settings/history?) Tj
+0 -14 Td (- How should reposts affect original author ranking credit?) Tj
+0 -14 Td (- What anti-gaming rules govern completion rate quality?) Tj
+0 -14 Td (- Should public domain stories be visibly tagged in all feeds?) Tj
+0 -14 Td (- What are the exact tie-breakers in Hot rankings?) Tj
+0 -14 Td () Tj
+0 -14 Td (Implementation Note) Tj
+0 -14 Td (This document is a product specification baseline derived from the provided concept and can) Tj
+0 -14 Td (be used as a reference while implementing both the mobile app and website parity.) Tj
+0 -14 Td () Tj
+ET
+endstream
+endobj
+15 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 16
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000147 00000 n 
+0000000274 00000 n 
+0000002677 00000 n 
+0000002804 00000 n 
+0000004856 00000 n 
+0000004983 00000 n 
+0000007111 00000 n 
+0000007239 00000 n 
+0000009036 00000 n 
+0000009165 00000 n 
+0000012179 00000 n 
+0000012308 00000 n 
+0000013876 00000 n 
+trailer
+<< /Size 16 /Root 1 0 R >>
+startxref
+13947
+%%EOF
