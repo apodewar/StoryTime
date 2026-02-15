@@ -9,7 +9,7 @@ import { fetchStoryMetrics } from "../lib/discovery-feed";
 import { createUuid } from "../lib/uuid";
 import { StoryRecord } from "../types/story";
 
-type FeedMode = "following" | "feed" | "public-domain";
+type FeedMode = "following" | "feed" | "public-domain" | "poetry";
 type FeedView = "cover" | "list";
 
 type FeedStory = StoryRecord & {
@@ -55,6 +55,9 @@ const firstLine = (story: StoryRecord) => {
   return sentence.length > 120 ? `${sentence.slice(0, 117)}...` : sentence;
 };
 
+const isPoetryStory = (story: Pick<StoryRecord, "genre">) =>
+  story.genre?.trim().toLowerCase() === "poetry";
+
 export default function UnifiedFeedPage({
   routeBase,
   title = "Personal Feed",
@@ -75,7 +78,9 @@ export default function UnifiedFeedPage({
 
   const mode = useMemo<FeedMode>(() => {
     const raw = searchParams.get("mode");
-    if (raw === "following" || raw === "public-domain" || raw === "feed") return raw;
+    if (raw === "following" || raw === "public-domain" || raw === "poetry" || raw === "feed") {
+      return raw;
+    }
     return "feed";
   }, [searchParams]);
 
@@ -256,6 +261,10 @@ export default function UnifiedFeedPage({
             (story) => !!story.author_id && followingIds.has(story.author_id),
           );
         }
+      }
+
+      if (mode === "poetry") {
+        baseStories = baseStories.filter((story) => isPoetryStory(story));
       }
 
       const authorIds = Array.from(
@@ -511,7 +520,7 @@ export default function UnifiedFeedPage({
           />
         </form>
         <div className="mt-3 flex flex-wrap gap-2">
-          {(["feed", "following", "public-domain"] as const).map((modeOption) => (
+          {(["feed", "following", "public-domain", "poetry"] as const).map((modeOption) => (
             <button
               key={modeOption}
               type="button"
@@ -526,7 +535,9 @@ export default function UnifiedFeedPage({
                 ? "All"
                 : modeOption === "following"
                   ? "Following only"
-                  : "Public domain only"}
+                  : modeOption === "public-domain"
+                    ? "Public domain only"
+                    : "Poetry only"}
             </button>
           ))}
           <button
@@ -635,6 +646,11 @@ export default function UnifiedFeedPage({
                         Public domain
                       </span>
                     ) : null}
+                    {isPoetryStory(activeStory) ? (
+                      <span className="rounded-full border border-sky-200 bg-sky-50 px-2 py-0.5 text-sky-700">
+                        Poetry
+                      </span>
+                    ) : null}
                     <span>{activeStory.views} views</span>
                     <span>{activeStory.likes} likes</span>
                   </div>
@@ -700,7 +716,11 @@ export default function UnifiedFeedPage({
               cover_url={story.cover_url ?? story.cover_image_url}
               author_name={story.author_name}
               author_label={story.is_public_domain ? "Original author" : "By"}
-              origin_label={story.is_public_domain ? "Public domain" : undefined}
+              origin_label={
+                [story.is_public_domain ? "Public domain" : null, isPoetryStory(story) ? "Poetry" : null]
+                  .filter(Boolean)
+                  .join(" | ") || undefined
+              }
               likes={story.likes}
               views={story.views}
               showActions

@@ -7,6 +7,7 @@ export const STORY_GENRES = [
   "Romance",
   "Mystery",
   "Horror",
+  "Poetry",
   "Slice of Life",
   "Adventure",
   "Magical Realism",
