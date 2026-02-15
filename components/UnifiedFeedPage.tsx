@@ -80,6 +80,8 @@ export default function UnifiedFeedPage({
   }, [searchParams]);
 
   const query = useMemo(() => (searchParams.get("q") ?? "").trim(), [searchParams]);
+  const genreFilter = useMemo(() => searchParams.get("genre") ?? "All", [searchParams]);
+  const lengthFilter = useMemo(() => searchParams.get("length") ?? "All", [searchParams]);
   const view = useMemo<FeedView>(() => {
     const raw = searchParams.get("view");
     if (raw === "list" || raw === "cover") return raw;
@@ -91,16 +93,27 @@ export default function UnifiedFeedPage({
     short: "Short",
     storytime: "Storytime",
   };
+  const genres = useMemo(
+    () => ["All", ...Array.from(new Set(stories.map((item) => item.genre))).sort()],
+    [stories],
+  );
+  const filteredStories = useMemo(() => {
+    return stories.filter((item) => {
+      if (genreFilter !== "All" && item.genre !== genreFilter) return false;
+      if (lengthFilter !== "All" && item.length_class !== lengthFilter) return false;
+      return true;
+    });
+  }, [genreFilter, lengthFilter, stories]);
 
   useEffect(() => {
     setSearchInput(query);
   }, [query]);
 
   useEffect(() => {
-    if (activeIndex > stories.length - 1) {
-      setActiveIndex(Math.max(stories.length - 1, 0));
+    if (activeIndex > filteredStories.length - 1) {
+      setActiveIndex(Math.max(filteredStories.length - 1, 0));
     }
-  }, [activeIndex, stories.length]);
+  }, [activeIndex, filteredStories.length]);
 
   useEffect(() => {
     let isMounted = true;
@@ -301,7 +314,13 @@ export default function UnifiedFeedPage({
     };
   }, [mode, query, shelves]);
 
-  const updateQueryParams = (next: { q?: string; mode?: FeedMode; view?: FeedView }) => {
+  const updateQueryParams = (next: {
+    q?: string;
+    mode?: FeedMode;
+    view?: FeedView;
+    genre?: string;
+    length?: string;
+  }) => {
     const params = new URLSearchParams(searchParams.toString());
     if (typeof next.q !== "undefined") {
       if (next.q.trim()) params.set("q", next.q.trim());
@@ -312,6 +331,14 @@ export default function UnifiedFeedPage({
     }
     if (typeof next.view !== "undefined") {
       params.set("view", next.view);
+    }
+    if (typeof next.genre !== "undefined") {
+      if (next.genre === "All") params.delete("genre");
+      else params.set("genre", next.genre);
+    }
+    if (typeof next.length !== "undefined") {
+      if (next.length === "All") params.delete("length");
+      else params.set("length", next.length);
     }
     const finalQuery = params.toString();
     router.push(finalQuery ? `${routeBase}?${finalQuery}` : routeBase);
@@ -427,7 +454,7 @@ export default function UnifiedFeedPage({
   const applySwipeAction = async (action: "save" | "dismiss" | "snooze", story: FeedStory) => {
     await sendAction(action, story);
     if (action === "save") {
-      setActiveIndex((prev) => Math.min(prev + 1, Math.max(stories.length - 1, 0)));
+      setActiveIndex((prev) => Math.min(prev + 1, Math.max(filteredStories.length - 1, 0)));
     }
   };
 
@@ -465,7 +492,7 @@ export default function UnifiedFeedPage({
     }
   };
 
-  const activeStory = stories[activeIndex];
+  const activeStory = filteredStories[activeIndex];
 
   return (
     <div className="space-y-5">
@@ -530,6 +557,27 @@ export default function UnifiedFeedPage({
           >
             List Mode
           </button>
+          <select
+            value={genreFilter}
+            onChange={(event) => updateQueryParams({ genre: event.target.value })}
+            className="h-8 rounded-full border border-slate-300 px-3 text-xs font-semibold text-slate-700"
+          >
+            {genres.map((genre) => (
+              <option key={genre} value={genre}>
+                {genre}
+              </option>
+            ))}
+          </select>
+          <select
+            value={lengthFilter}
+            onChange={(event) => updateQueryParams({ length: event.target.value })}
+            className="h-8 rounded-full border border-slate-300 px-3 text-xs font-semibold text-slate-700"
+          >
+            <option value="All">All lengths</option>
+            <option value="flash">Flash</option>
+            <option value="short">Short</option>
+            <option value="storytime">Storytime</option>
+          </select>
         </div>
       </section>
 
@@ -541,9 +589,9 @@ export default function UnifiedFeedPage({
         <div className="rounded-2xl border border-rose-200 bg-rose-50 p-5 text-rose-700">
           {error}
         </div>
-      ) : stories.length === 0 ? (
+      ) : filteredStories.length === 0 ? (
         <div className="rounded-2xl border border-slate-200 bg-white p-5 text-slate-600">
-          No stories found.
+          No stories found for this filter.
         </div>
       ) : view === "cover" ? (
         <section className="space-y-3">
@@ -631,14 +679,14 @@ export default function UnifiedFeedPage({
                 </button>
               </div>
               <p className="text-xs text-slate-500">
-                Story {activeIndex + 1} of {stories.length}. Swipe right to save, left to dismiss, up for not today.
+                Story {activeIndex + 1} of {filteredStories.length}. Swipe right to save, left to dismiss, up for not today.
               </p>
             </>
           ) : null}
         </section>
       ) : (
         <section className="space-y-3">
-          {stories.map((story) => (
+          {filteredStories.map((story) => (
             <StoryCard
               key={story.id}
               id={story.id}
