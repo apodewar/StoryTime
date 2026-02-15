@@ -61,6 +61,18 @@ SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 
 Without this key, signup will still work but may require email confirmation based on your Supabase Auth settings.
 
+## Optional: competition submissions by email
+
+To enable Featured-page competition PDF submissions to be emailed, set:
+
+```
+RESEND_API_KEY=your-resend-api-key
+COMPETITION_TO_EMAIL=apodewar@gmail.com
+COMPETITION_FROM_EMAIL=StoryTime <onboarding@resend.dev>
+```
+
+`COMPETITION_TO_EMAIL` defaults to `apodewar@gmail.com` if omitted.
+
 ## Notes
 
 - Cover images are stored in the `story-covers` bucket created by `scripts/setup.sql`.

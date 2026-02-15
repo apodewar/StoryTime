@@ -14,6 +14,7 @@ type SessionUser = {
 export default function Header() {
   const pathname = usePathname();
   const [user, setUser] = useState<SessionUser | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const isWelcomeRoute =
     pathname === "/" || pathname === "/login" || pathname === "/signup";
@@ -25,19 +26,20 @@ export default function Header() {
       const { data } = await supabase.auth.getUser();
       if (!isMounted) return;
       if (data?.user) {
-        const { data: profileData } = await supabase
-          .from("profiles")
-          .select("username")
-          .eq("id", data.user.id)
-          .maybeSingle();
+        const [{ data: profileData }, { data: adminData }] = await Promise.all([
+          supabase.from("profiles").select("username").eq("id", data.user.id).maybeSingle(),
+          supabase.from("admin_users").select("user_id").eq("user_id", data.user.id).maybeSingle(),
+        ]);
         if (!isMounted) return;
         setUser({
           id: data.user.id,
           username: (profileData?.username as string | null | undefined) ?? null,
           email: data.user.email,
         });
+        setIsAdmin(!!adminData?.user_id);
       } else {
         setUser(null);
+        setIsAdmin(false);
       }
       setLoading(false);
     };
@@ -49,8 +51,18 @@ export default function Header() {
         if (!isMounted) return;
         if (session?.user) {
           setUser({ id: session.user.id, email: session.user.email, username: null });
+          void supabase
+            .from("admin_users")
+            .select("user_id")
+            .eq("user_id", session.user.id)
+            .maybeSingle()
+            .then(({ data: adminData }) => {
+              if (!isMounted) return;
+              setIsAdmin(!!adminData?.user_id);
+            });
         } else {
           setUser(null);
+          setIsAdmin(false);
         }
       },
     );
@@ -92,6 +104,7 @@ export default function Header() {
               <Link href="/shelves">Shelves</Link>
               <Link href="/write">Write</Link>
               <Link href="/settings">Settings</Link>
+              {isAdmin ? <Link href="/admin">Admin</Link> : null}
               {loading ? (
                 <span className="text-sm text-slate-500">Loading...</span>
               ) : user ? (
