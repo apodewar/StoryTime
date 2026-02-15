@@ -312,6 +312,15 @@ export default function ProfilePage() {
                 <span className="text-xs text-rose-600">{followError}</span>
               ) : null}
             </div>
+          ) : sessionUserId === profile.id ? (
+            <div className="ml-auto">
+              <Link
+                href="/profile/edit"
+                className="rounded-full border border-slate-300 px-3 py-1 text-xs font-semibold text-slate-700 transition hover:border-slate-400"
+              >
+                Edit profile
+              </Link>
+            </div>
           ) : null}
         </div>
         {profile.bio ? (

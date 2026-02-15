@@ -51,6 +51,16 @@ Then run:
 npm run db:seed
 ```
 
+## Optional: instant signup without email confirmation
+
+If you want `Sign up` to immediately create and sign in users (no email confirmation step), also set:
+
+```
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+```
+
+Without this key, signup will still work but may require email confirmation based on your Supabase Auth settings.
+
 ## Notes
 
 - Cover images are stored in the `story-covers` bucket created by `scripts/setup.sql`.

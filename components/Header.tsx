@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { supabase } from "../lib/supabase/client";
 
 type SessionUser = {
@@ -11,8 +12,11 @@ type SessionUser = {
 };
 
 export default function Header() {
+  const pathname = usePathname();
   const [user, setUser] = useState<SessionUser | null>(null);
   const [loading, setLoading] = useState(true);
+  const isWelcomeRoute =
+    pathname === "/" || pathname === "/login" || pathname === "/signup";
 
   useEffect(() => {
     let isMounted = true;
@@ -64,48 +68,51 @@ export default function Header() {
   return (
     <header className="header">
       <div className="container">
-        <div className="brand">StoryTime</div>
+        <Link href="/" className="brand no-underline hover:no-underline">
+          StoryTime
+        </Link>
         <nav className="nav">
-          <Link href="/feed">Feed</Link>
-          <Link href="/following">Following</Link>
-          <Link href="/algo">Algo</Link>
-          <Link href="/suggestions">Suggestions</Link>
-          <Link href="/hot">Hot</Link>
-          <Link href="/featured">Featured</Link>
-          <Link href="/authors">Authors</Link>
-          <Link href="/shelves">Shelves</Link>
-          <Link href="/public-domain">Public domain</Link>
-          <Link href="/write">Write</Link>
-          <Link href="/settings">Settings</Link>
-          <Link href="/admin">Admin</Link>
-          {loading ? (
-            <span className="text-sm text-slate-500">Loading...</span>
-          ) : user ? (
+          {isWelcomeRoute ? (
             <>
-              <Link href="/profile/edit" className="text-sm text-slate-600">
-                Edit profile
-              </Link>
-              <Link
-                href={`/profile/${user.username ?? user.id}`}
-                className="text-sm text-slate-600"
-              >
-                My profile
-              </Link>
-              <span className="text-sm text-slate-600">
-                {user.email ?? "Signed in"}
-              </span>
-              <button
-                onClick={handleLogout}
-                className="rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-600 transition hover:border-slate-300"
-                type="button"
-              >
-                Logout
-              </button>
+              <Link href="/algo">Continue as guest</Link>
+              <Link href="/login">Log in</Link>
+              <Link href="/signup">Sign up</Link>
             </>
           ) : (
             <>
-              <Link href="/login">Login</Link>
-              <Link href="/signup">Signup</Link>
+              <Link href={user ? `/profile/${user.username ?? user.id}` : "/login"}>
+                Profile
+              </Link>
+              <Link href="/personal-feed">Personal Feed</Link>
+              <Link href="/algo">StoryTime Algorithm</Link>
+              <Link href="/suggestions">Suggestions</Link>
+              <Link href="/hot">Hot</Link>
+              <Link href="/featured">Featured Page</Link>
+              <Link href="/authors">Authors</Link>
+              <Link href="/shelves">Shelves</Link>
+              <Link href="/write">Write</Link>
+              <Link href="/settings">Settings</Link>
+              {loading ? (
+                <span className="text-sm text-slate-500">Loading...</span>
+              ) : user ? (
+                <>
+                  <span className="text-sm text-slate-600">
+                    {user.email ?? "Signed in"}
+                  </span>
+                  <button
+                    onClick={handleLogout}
+                    className="rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-600 transition hover:border-slate-300"
+                    type="button"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link href="/login">Login</Link>
+                  <Link href="/signup">Signup</Link>
+                </>
+              )}
             </>
           )}
         </nav>

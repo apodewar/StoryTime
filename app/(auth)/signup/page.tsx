@@ -19,6 +19,11 @@ export default function SignupPage() {
           Log in
         </Link>
       </p>
+      <p className="text-center text-sm text-slate-600">
+        <Link href="/algo" className="font-medium text-slate-900">
+          Continue as guest
+        </Link>
+      </p>
     </div>
   );
 }

@@ -45,34 +45,64 @@ export default function AuthForm({ defaultAction = "login" }: AuthFormProps) {
         router.refresh();
       }
     } else {
-      const { data, error: signUpError } = await supabase.auth.signUp({
-        email,
-        password,
-      });
+      let usedFallbackSignup = false;
+      let createdAccount = false;
 
-      if (signUpError) {
-        setError(signUpError.message);
-      } else {
-        if (data.session?.user?.id) {
-          const displayName = email.split("@")[0] ?? "Reader";
-          await supabase.from("profiles").upsert({
-            id: data.session.user.id,
-            display_name: displayName,
-          });
-          await supabase.from("shelves").upsert(
-            {
-              user_id: data.session.user.id,
-              name: "Read Later",
-            },
-            { onConflict: "user_id,name" },
-          );
+      try {
+        const response = await fetch("/api/auth/signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+        const payload = await response.json().catch(() => null);
+
+        if (response.ok) {
+          createdAccount = true;
+        } else if (response.status === 503) {
+          usedFallbackSignup = true;
+        } else {
+          setError(payload?.error ?? "Unable to create account.");
+          setLoading(false);
+          return;
         }
-        if (data.session) {
+      } catch {
+        usedFallbackSignup = true;
+      }
+
+      if (usedFallbackSignup) {
+        const { data, error: signUpError } = await supabase.auth.signUp({
+          email,
+          password,
+        });
+
+        if (signUpError) {
+          setError(signUpError.message);
+          setLoading(false);
+          return;
+        }
+
+        if (!data.session) {
+          setMessage("Account created. Check your email to confirm.");
+          setLoading(false);
+          return;
+        }
+
+        createdAccount = true;
+      }
+
+      if (createdAccount) {
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+
+        if (signInError) {
+          setError(signInError.message);
+        } else {
           setMessage("Account created.");
           router.push("/feed");
           router.refresh();
-        } else {
-          setMessage("Account created. Check your email to confirm.");
+          return;
         }
       }
     }

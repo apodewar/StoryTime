@@ -10,6 +10,11 @@ type ShelfRow = {
   created_at: string;
 };
 
+type ShelfStoryPreview = {
+  title: string;
+  slug: string;
+};
+
 const ensureDefaultShelf = async (userId: string) => {
   await supabase.from("shelves").upsert(
     {
@@ -24,6 +29,9 @@ export default function ShelvesPage() {
   const [userId, setUserId] = useState<string | null>(null);
   const [shelves, setShelves] = useState<ShelfRow[]>([]);
   const [countsByShelf, setCountsByShelf] = useState<Record<string, number>>({});
+  const [previewByShelf, setPreviewByShelf] = useState<
+    Record<string, ShelfStoryPreview[]>
+  >({});
   const [newShelf, setNewShelf] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -52,6 +60,7 @@ export default function ShelvesPage() {
 
     if (loadedShelves.length === 0) {
       setCountsByShelf({});
+      setPreviewByShelf({});
       setLoading(false);
       return;
     }
@@ -70,7 +79,47 @@ export default function ShelvesPage() {
       {} as Record<string, number>,
     );
 
+    const previews = ((countData ?? []) as Array<{ shelf_id: string; story_id: string }>)
+      .reduce(
+        (acc, row) => {
+          if (!acc[row.shelf_id]) acc[row.shelf_id] = [];
+          acc[row.shelf_id].push(row.story_id);
+          return acc;
+        },
+        {} as Record<string, string[]>,
+      );
+
+    const uniqueStoryIds = Array.from(
+      new Set(((countData ?? []) as Array<{ shelf_id: string; story_id: string }>).map((row) => row.story_id)),
+    );
+
+    let storyMap: Record<string, ShelfStoryPreview> = {};
+    if (uniqueStoryIds.length > 0) {
+      const { data: storiesData } = await supabase
+        .from("stories")
+        .select("id, title, slug")
+        .in("id", uniqueStoryIds);
+
+      storyMap = Object.fromEntries(
+        ((storiesData ?? []) as Array<{ id: string; title: string; slug: string }>).map((story) => [
+          story.id,
+          { title: story.title, slug: story.slug },
+        ]),
+      );
+    }
+
+    const previewsByShelf = Object.fromEntries(
+      Object.entries(previews).map(([shelfId, storyIds]) => [
+        shelfId,
+        storyIds
+          .map((storyId) => storyMap[storyId])
+          .filter(Boolean)
+          .slice(0, 3),
+      ]),
+    );
+
     setCountsByShelf(counts);
+    setPreviewByShelf(previewsByShelf);
     setLoading(false);
   };
 
@@ -220,14 +269,35 @@ export default function ShelvesPage() {
         <div className="space-y-3">
           {shelves.map((shelf) => (
             <article key={shelf.id} className="book-surface rounded-2xl p-4">
-              <div className="flex items-center justify-between gap-2">
-                <Link href={`/shelves/${shelf.id}`} className="no-underline hover:no-underline">
-                  <h2 className="text-lg font-semibold text-slate-900">{shelf.name}</h2>
-                  <p className="text-xs text-slate-500">
-                    {countsByShelf[shelf.id] ?? 0} stories
-                  </p>
-                </Link>
+              <div className="flex items-start justify-between gap-3">
+                <div className="space-y-2">
+                  <Link href={`/shelves/${shelf.id}`} className="no-underline hover:no-underline">
+                    <h2 className="text-lg font-semibold text-slate-900">{shelf.name}</h2>
+                    <p className="text-xs text-slate-500">
+                      {countsByShelf[shelf.id] ?? 0} stories
+                    </p>
+                  </Link>
+                  {(previewByShelf[shelf.id] ?? []).length > 0 ? (
+                    <ul className="space-y-1">
+                      {(previewByShelf[shelf.id] ?? []).map((story) => (
+                        <li key={`${shelf.id}-${story.slug}`} className="text-sm text-slate-600">
+                          <Link href={`/story/${story.slug}`} className="hover:underline">
+                            {story.title}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-sm text-slate-500">No stories in this shelf yet.</p>
+                  )}
+                </div>
                 <div className="flex gap-2">
+                  <Link
+                    href={`/shelves/${shelf.id}`}
+                    className="rounded-full border border-slate-300 px-3 py-1 text-xs font-semibold text-slate-700 no-underline hover:no-underline"
+                  >
+                    View stories
+                  </Link>
                   <button
                     type="button"
                     onClick={() => renameShelf(shelf)}

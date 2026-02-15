@@ -53,7 +53,7 @@ a {
   @apply sticky top-0 z-20;
 }
 
-.header > .brand {
+.brand {
   font-family: var(--font-serif);
   color: var(--accent);
   @apply text-lg font-semibold tracking-wide;
