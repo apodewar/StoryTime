@@ -70,9 +70,13 @@ export default function AuthForm({ defaultAction = "login" }: AuthFormProps) {
       }
 
       if (usedFallbackSignup) {
+        const emailRedirectTo =
+          typeof window !== "undefined" ? `${window.location.origin}/profile` : undefined;
+
         const { data, error: signUpError } = await supabase.auth.signUp({
           email,
           password,
+          options: emailRedirectTo ? { emailRedirectTo } : undefined,
         });
 
         if (signUpError) {

@@ -26,6 +26,8 @@ type CommentRow = {
   created_at: string;
   user_id: string | null;
   profile?: Profile | null;
+  like_count?: number;
+  liked_by_me?: boolean;
 };
 
 type StoryPageClientProps = {
@@ -49,6 +51,9 @@ export default function StoryPageClient({ slug }: StoryPageClientProps) {
   const [commentBody, setCommentBody] = useState("");
   const [commentError, setCommentError] = useState<string | null>(null);
   const [commentLoading, setCommentLoading] = useState(false);
+  const [commentLikeLoadingId, setCommentLikeLoadingId] = useState<string | null>(null);
+  const [activeCommentLikeId, setActiveCommentLikeId] = useState<string | null>(null);
+  const [commentLikeError, setCommentLikeError] = useState<string | null>(null);
   const [isFollowingAuthor, setIsFollowingAuthor] = useState(false);
   const [followLoading, setFollowLoading] = useState(false);
   const [followError, setFollowError] = useState<string | null>(null);
@@ -212,6 +217,7 @@ export default function StoryPageClient({ slug }: StoryPageClientProps) {
         .order("created_at", { ascending: true });
 
       const baseComments = (commentData ?? []) as CommentRow[];
+      const commentIds = baseComments.map((item) => item.id);
       const commenterIds = Array.from(
         new Set(baseComments.map((item) => item.user_id).filter(Boolean)),
       ) as string[];
@@ -227,11 +233,40 @@ export default function StoryPageClient({ slug }: StoryPageClientProps) {
         );
       }
 
+      let commentLikeRows: Array<{ comment_id: string; user_id: string }> = [];
+      if (commentIds.length > 0) {
+        const { data: likesData } = await supabase
+          .from("story_comment_likes")
+          .select("comment_id, user_id")
+          .in("comment_id", commentIds);
+
+        commentLikeRows =
+          ((likesData ?? []) as Array<{ comment_id: string; user_id: string }>) ?? [];
+      }
+
+      const likeCountsByComment = commentLikeRows.reduce(
+        (acc, row) => {
+          acc[row.comment_id] = (acc[row.comment_id] ?? 0) + 1;
+          return acc;
+        },
+        {} as Record<string, number>,
+      );
+
+      const likedByMeCommentIds = new Set(
+        userId
+          ? commentLikeRows
+              .filter((row) => row.user_id === userId)
+              .map((row) => row.comment_id)
+          : [],
+      );
+
       if (isMounted) {
         setComments(
           baseComments.map((comment) => ({
             ...comment,
             profile: comment.user_id ? profilesById[comment.user_id] ?? null : null,
+            like_count: likeCountsByComment[comment.id] ?? 0,
+            liked_by_me: likedByMeCommentIds.has(comment.id),
           })),
         );
       }
@@ -410,12 +445,81 @@ export default function StoryPageClient({ slug }: StoryPageClientProps) {
         {
           ...(data as CommentRow),
           profile: currentUserProfile,
+          like_count: 0,
+          liked_by_me: false,
         },
       ]);
       setCommentBody("");
     }
 
     setCommentLoading(false);
+  };
+
+  const handleToggleCommentLike = async (comment: CommentRow) => {
+    setActiveCommentLikeId(comment.id);
+    setCommentLikeError(null);
+
+    if (!userId) {
+      setCommentLikeError("Sign in to like comments.");
+      return;
+    }
+
+    if (comment.user_id && comment.user_id === userId) {
+      setCommentLikeError("You can only like other people's comments.");
+      return;
+    }
+
+    setCommentLikeLoadingId(comment.id);
+
+    if (comment.liked_by_me) {
+      const { error: unlikeError } = await supabase
+        .from("story_comment_likes")
+        .delete()
+        .eq("comment_id", comment.id)
+        .eq("user_id", userId);
+
+      if (unlikeError) {
+        setCommentLikeError("Unable to update comment like right now.");
+      } else {
+        setComments((prev) =>
+          prev.map((item) =>
+            item.id === comment.id
+              ? {
+                  ...item,
+                  liked_by_me: false,
+                  like_count: Math.max(0, (item.like_count ?? 0) - 1),
+                }
+              : item,
+          ),
+        );
+      }
+
+      setCommentLikeLoadingId(null);
+      return;
+    }
+
+    const { error: likeError } = await supabase.from("story_comment_likes").insert({
+      comment_id: comment.id,
+      user_id: userId,
+    });
+
+    if (likeError) {
+      setCommentLikeError("Unable to update comment like right now.");
+    } else {
+      setComments((prev) =>
+        prev.map((item) =>
+          item.id === comment.id
+            ? {
+                ...item,
+                liked_by_me: true,
+                like_count: (item.like_count ?? 0) + 1,
+              }
+            : item,
+        ),
+      );
+    }
+
+    setCommentLikeLoadingId(null);
   };
 
   const handleToggleFollowAuthor = async () => {
@@ -669,6 +773,28 @@ export default function StoryPageClient({ slug }: StoryPageClientProps) {
                 <p className="mt-2 whitespace-pre-wrap text-sm text-slate-700">
                   {comment.body}
                 </p>
+                <div className="mt-3">
+                  <button
+                    type="button"
+                    onClick={() => handleToggleCommentLike(comment)}
+                    disabled={
+                      commentLikeLoadingId === comment.id
+                      || (!!userId && comment.user_id === userId)
+                    }
+                    className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
+                      comment.liked_by_me
+                        ? "bg-slate-900 text-white"
+                        : "border border-slate-300 text-slate-700 hover:border-slate-400"
+                    } disabled:cursor-not-allowed disabled:opacity-60`}
+                  >
+                    {commentLikeLoadingId === comment.id
+                      ? "Saving..."
+                      : `${comment.liked_by_me ? "Liked" : "Like"} (${comment.like_count ?? 0})`}
+                  </button>
+                  {activeCommentLikeId === comment.id && commentLikeError ? (
+                    <div className="mt-2 text-xs text-rose-600">{commentLikeError}</div>
+                  ) : null}
+                </div>
               </div>
             ))
           )}

@@ -258,10 +258,18 @@ create table if not exists story_comments (
   created_at timestamptz not null default now()
 );
 
+create table if not exists story_comment_likes (
+  comment_id uuid not null references story_comments(id) on delete cascade,
+  user_id uuid not null references auth.users(id) on delete cascade,
+  created_at timestamptz not null default now(),
+  primary key (comment_id, user_id)
+);
+
 create index if not exists reports_story_id_idx on reports (story_id);
 create index if not exists completions_story_id_idx on completions (story_id);
 create index if not exists story_likes_story_id_idx on story_likes (story_id);
 create index if not exists story_comments_story_id_idx on story_comments (story_id);
+create index if not exists story_comment_likes_comment_id_idx on story_comment_likes (comment_id);
 
 -- RLS
 alter table profiles enable row level security;
@@ -276,6 +284,7 @@ alter table reports enable row level security;
 alter table completions enable row level security;
 alter table story_likes enable row level security;
 alter table story_comments enable row level security;
+alter table story_comment_likes enable row level security;
 alter table editorial_picks enable row level security;
 alter table featured_items enable row level security;
 alter table user_settings enable row level security;
@@ -492,6 +501,29 @@ drop policy if exists "story_comments_insert_own" on story_comments;
 create policy "story_comments_insert_own"
   on story_comments for insert
   with check (auth.uid() = user_id);
+
+drop policy if exists "story_comment_likes_public_read" on story_comment_likes;
+create policy "story_comment_likes_public_read"
+  on story_comment_likes for select
+  using (true);
+
+drop policy if exists "story_comment_likes_insert_own" on story_comment_likes;
+create policy "story_comment_likes_insert_own"
+  on story_comment_likes for insert
+  with check (
+    auth.uid() = user_id
+    and exists (
+      select 1
+      from story_comments c
+      where c.id = story_comment_likes.comment_id
+        and c.user_id is distinct from auth.uid()
+    )
+  );
+
+drop policy if exists "story_comment_likes_delete_own" on story_comment_likes;
+create policy "story_comment_likes_delete_own"
+  on story_comment_likes for delete
+  using (auth.uid() = user_id);
 
 drop policy if exists "shelf_items_public_read" on shelf_items;
 create policy "shelf_items_public_read"
